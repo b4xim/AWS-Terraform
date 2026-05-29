@@ -6,7 +6,24 @@ resource "aws_instance" "terraform-project" {
   vpc_security_group_ids = [ aws_security_group.tf-security-group.id ]
   key_name      = "terraform-key"
   depends_on = [aws_s3_bucket.tf_s3]
-  
+  user_data = <<-EOF
+              #!/bin/bash
+              git clone https://github.com/verma-kunal/nodejs-mysql.git /home/ubuntu/nodejs-app
+              cd /home/ubuntu/nodejs-app
+
+              sudo apt update -y
+              sudo apt install -y nodejs npm
+
+              echo "DB_HOST=" | sudo tee .env
+              echo "DB_USER=" | sudo tee -a .env
+              sudo echo "DB_PASS=" | sudo tee -a .env
+              echo "DB_NAME=" | sudo tee -a .env
+              echo "TABLE_NAME=" | sudo tee -a .env
+              echo "PORT=" | sudo tee -a .env
+
+              npm install
+              EOF
+  user_data_replace_on_change = true
   tags = {
     Name        = "NodeJs-Server"
     Environment = "Dev"
