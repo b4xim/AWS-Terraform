@@ -66,3 +66,6 @@ resource "aws_security_group" "tf-security-group" {
         cidr_blocks      = ["0.0.0.0/0"]
     }
 }
+output "instance_public_ip" {
+  value = "ssh -i ~/.ssh/terraform-key.pem ubuntu@${aws_instance.terraform-project.public_ip}"
+}
