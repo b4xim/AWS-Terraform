@@ -1,7 +1,7 @@
 
 resource "aws_instance" "terraform-project" {
-  ami           = "ami-091138d0f0d41ff90"
-  instance_type = "t2.micro"
+  ami           = var.ami_id
+  instance_type = var.instance_type
   associate_public_ip_address = true
   vpc_security_group_ids = [ aws_security_group.tf-security-group.id ]
   key_name      = "terraform-key"
@@ -36,7 +36,7 @@ resource "aws_instance" "terraform-project" {
 resource "aws_security_group" "tf-security-group" {
   name        = "nodejs-tf-sg"
   description = "Security group for Terraform EC2 instance for SSH and HTTP access"
-  vpc_id      = "vpc-0b3300f0d88a79ba2"
+  vpc_id      = var.vpc_id
     ingress {
         description      = "Allow SSH"
         from_port        = 22
