@@ -14,12 +14,12 @@ resource "aws_instance" "terraform-project" {
               sudo apt update -y
               sudo apt install -y nodejs npm
 
-              echo "DB_HOST=" | sudo tee .env
-              echo "DB_USER=" | sudo tee -a .env
-              sudo echo "DB_PASS=" | sudo tee -a .env
-              echo "DB_NAME=" | sudo tee -a .env
-              echo "TABLE_NAME=" | sudo tee -a .env
-              echo "PORT=" | sudo tee -a .env
+              echo "DB_HOST=${local.rds_endpoint}" | sudo tee .env
+              echo "DB_USER=${aws_db_instance.tf_rds_mysql.username}" | sudo tee -a .env
+              sudo echo "DB_PASS=${aws_db_instance.tf_rds_mysql.password}" | sudo tee -a .env
+              echo "DB_NAME=${aws_db_instance.tf_rds_mysql.db_name}" | sudo tee -a .env
+              echo "TABLE_NAME=users" | sudo tee -a .env
+              echo "PORT=3000" | sudo tee -a .env
 
               npm install
               EOF
